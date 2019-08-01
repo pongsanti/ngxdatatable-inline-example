@@ -1,0 +1,55 @@
+<div class="container-fluid">
+    <h3>
+        Inline Editing
+    </h3>
+    <div>
+        <form [formGroup]="partnersForm" (ngSubmit)="onSubmit($event)">
+            <div formArrayName="partners">
+                <ngx-datatable #mydatatable class="material" [headerHeight]="50" [limit]="5" [columnMode]="'force'"
+                    [footerHeight]="50" [rowHeight]="'auto'" [rows]="rows">
+                    <ngx-datatable-column name="Name">
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                            let-row="row">
+                            <span title="Double click to edit" (dblclick)="editing[rowIndex + '-name'] = true"
+                                *ngIf="!editing[rowIndex + '-name']">
+                                {{value}}
+                            </span>
+                            <!-- <input autofocus (blur)="updateValue($event, 'name', rowIndex)" *ngIf="editing[rowIndex+ '-name']"
+                        type="text" [value]="value" /> -->
+                            <div *ngIf="editing[rowIndex+ '-name']" [formGroupName]="rowIndex">
+                                <input formControlName="name" autofocus type="text"
+                                    (blur)="onInputBlur(rowIndex, 'name')" />
+                                <div *ngIf="c(rowIndex,'name').invalid && (c(rowIndex,'name').dirty || c(rowIndex,'name').touched)"
+                                    class="alert alert-danger">
+                                    <div *ngIf="c(rowIndex,'name').errors.required">
+                                        Name is required.
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Gender">
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                            let-value="value">
+                            <span title="Double click to edit" (dblclick)="editing[rowIndex + '-gender'] = true"
+                                *ngIf="!editing[rowIndex + '-gender']">
+                                {{value}}
+                            </span>
+                            <select *ngIf="editing[rowIndex + '-gender']" (blur)="editing[rowIndex + '-gender'] = false"
+                                (change)="updateValue($event, 'gender', rowIndex)" [value]="value">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Age">
+                        <ng-template ngx-datatable-cell-template let-value="value">
+                            {{value}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
