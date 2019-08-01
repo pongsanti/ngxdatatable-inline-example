@@ -35,11 +35,12 @@
                                 *ngIf="!editing[rowIndex + '-gender']">
                                 {{value}}
                             </span>
-                            <select *ngIf="editing[rowIndex + '-gender']" (blur)="editing[rowIndex + '-gender'] = false"
-                                (change)="updateValue($event, 'gender', rowIndex)" [value]="value">
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
+                            <div *ngIf="editing[rowIndex + '-gender']" [formGroupName]="rowIndex">
+                                <select formControlName="gender" (blur)="onInputBlur(rowIndex, 'gender')">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Age">
